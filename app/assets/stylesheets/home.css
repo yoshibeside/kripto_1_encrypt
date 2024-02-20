@@ -1,0 +1,52 @@
+.Container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    font-weight: bold;
+  }
+  
+  select, textarea, input[type="text"], input[type="file"], input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Ensure padding and border are included in width */
+    margin-top: 5px;
+  }
+  
+  textarea {
+    resize: vertical; /* Allow vertical resizing */
+  }
+  
+  input[type="submit"] {
+    width: auto; /* Set width to auto to fit content */
+    cursor: pointer; /* Show pointer cursor on hover */
+    background-color: #007bff; /* Blue color for primary button */
+    color: #fff; /* White text color */
+    border: none; /* Remove border */
+    border-radius: 4px; /* Add border radius */
+    padding: 10px 20px; /* Add padding */
+    margin-top: 10px; /* Add margin at the top */
+  }
+  
+  input[type="submit"]:hover {
+    background-color: #0056b3; /* Darker blue color on hover */
+  }
+  
+  .btn-secondary {
+    background-color: #6c757d; /* Gray color for secondary button */
+  }
+  
+  .btn-secondary:hover {
+    background-color: #5a6268; /* Darker gray color on hover */
+  }
