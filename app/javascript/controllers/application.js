@@ -92,25 +92,30 @@ var dropdown = document.getElementById('dropdown');
     var downloadLinks = document.querySelectorAll('.download-link');
     
     // Attach click event listener to each download link
-    downloadLinks.forEach(function(link) {
-      link.addEventListener('click', function(event) {
-        // Prevent default link behavior (i.e., opening the link)
-        event.preventDefault();
+    // downloadLinks.forEach(function(link) {
+    //   link.addEventListener('click', function(event) {
+    //     // Prevent default link behavior (i.e., opening the link)
+    //     event.preventDefault();
+    //     // console.log("this is link: ", link)
+    //     // console.log("this is link: ", link.getAttribute('class'))
+    //     // console.log("this is link: ", link.getAttribute('data-data_url'))
+    //     // console.log("this is link: ", link.getAttribute('href'))
         
-        // Get data URL and filename from the data attributes
-        var dataUrl = link.getAttribute('data-data_url');
-        var filename = link.getAttribute('data-filename');
+    //     // Get data URL and filename from the data attributes
+    //     var dataUrl = link.getAttribute('data-data-url');
+    //     var filename = link.getAttribute('data-filename');
         
-        // Create an anchor element to trigger the download
-        var anchor = document.createElement('a');
-        anchor.href = dataUrl;
-        anchor.download = filename;
-        anchor.click(); // Trigger the download
+    //     console.log("this is data url", dataUrl)
+    //     // Create an anchor element to trigger the download
+    //     var anchor = document.createElement('a');
+    //     anchor.href = dataUrl;
+    //     anchor.download = filename;
+    //     anchor.click(); // Trigger the download
         
-        // Clean up the anchor element
-        anchor.remove();
-      });
-    });
+    //     // Clean up the anchor element
+    //     anchor.remove();
+    //   });
+    // });
 }
 document.addEventListener('DOMContentLoaded', function() {
     behavior();

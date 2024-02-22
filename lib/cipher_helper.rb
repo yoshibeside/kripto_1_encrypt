@@ -298,60 +298,45 @@ module CipherHelper
         return result
     end
 
-    def self.enc_trans_vertical(text, columns)
-        # Determine the necessary rows for the given column count
-        rows = (text.length / columns.to_f).ceil
-        temp = text
-      
-        # Pad the text so it fits perfectly into the grid
-        padded_length = rows * columns
-        text = text.ljust(padded_length, 'X')
-        Rails.logger.debug "paddin ghow many #{padded_length} COL: #{columns}"
-      
-        add_pad = padded_length - (temp.length)
+    def self.enc_trans_vertical(text, key)
+        columns = key.length
+        rows = (text.length.to_f / columns).ceil
+
         # Create the grid and fill it column by column
-        grid = Array.new(rows) { Array.new(columns) }
+        grid = Array.new(columns) { Array.new(rows) }
 
         count = 0
-        (0..rows-1).each do |n|
-            (0..columns-1).each do |m|
-                grid[n][m] = text[count]
-                count += 1
+        (0...rows).each do |n|
+            (0...columns).each do |m|
+            grid[m][n] = text[count]
+            count += 1
             end
         end
 
-        transposed_text = grid.transpose.flatten.join
-
-        Rails.logger.debug "hasil trans vert #{grid}"
-        
         # Read the text out column by column
-        
-
-        Rails.logger.debug "enc trans vertical #{transposed_text} + pad len: #{add_pad.to_s}"
-        transposed_text += 'X'
-        transposed_text += add_pad.to_s
+        transposed_text = grid.flatten.join
     end
 
-    def self.dec_trans_vertical(ciphertext, columns, pad_length)
+
+    def self.dec_trans_vertical(ciphertext, key)
+        columns =  key.length
         # Calculate rows based on the ciphertext length and column count
-        rows = ((ciphertext.length.to_f - 1) / columns).ceil
-      
+        rows = (ciphertext.length.to_f / columns).ceil
+
         # Create the grid to hold the columnar data
         grid = Array.new(columns) { Array.new(rows) }
 
-        # Since we're decrypting, we fill the grid by columns first
+        # Fill the grid column by column
         count = 0
-        (0..columns-1).each do |n|
-            (0..rows-1).each do |m|
-                grid[n][m] = ciphertext[count]
-                count += 1
+        (0...columns).each do |n|
+            (0...rows).each do |m|
+            grid[n][m] = ciphertext[count]
+            count += 1
             end
         end
-        t_ori = grid.transpose.flatten.join
-        # Remove any trailing 'X' characters used for padding
-        t_ori = t_ori[0..-(pad_length + 1)]
-        Rails.logger.debug "hasil trans potong #{t_ori} ini berapa #{(pad_length + 1)}  #{pad_length}"
-        return t_ori
+
+        # Read the text out row by row
+        transposed_text = grid.transpose.flatten.join
     end
 
 end

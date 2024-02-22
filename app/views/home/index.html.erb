@@ -1,7 +1,7 @@
 <% stylesheet_link_tag "home" %>
 
 <h1>Cipher Kriptografi Tugas 1</h1>
-
+<%= debug session %>
 <div class="Container">
   <%= form_with(url: '/process_form', method: 'post', multipart: true) do |form| %>
     <label for="dropdown">Input Type:</label>
@@ -89,26 +89,19 @@
             <label>Result: </label>
             <p><%= flash[:result] %></p>
             <% if flash[:binary_data] %>
-                <% binary_data = flash[:binary_data] %>
-                <% filename = flash[:filename] || "file.bin" %>
-                <%= link_to "#", class: "download-link", data: { data_url: "data:application/octet-stream;base64,#{binary_data}", filename: filename } do %>
-                    <button class="download-button">Download Binary File</button>
-                <% end %>
+                <button>
+                <%= link_to "Download binary", downloadbin_path(uuid: flash[:binary_data]) %>
+                </button>
             <% end %>
             <% if flash[:text_data] %>
-                <% text_data = flash[:text_data] %>
-                <% filename = flash[:filename] || "file.txt" %>
-                <%= link_to "#", class: "download-link", data: { data_url: "data:text/plain;charset=utf-8,#{text_data}", filename: filename } do %>
-                    <button class="download-button">Download as Text File</button>
-                <% end %>
+                <button>
+                <%= link_to "Download text", download_path(uuid: flash[:text_data]) %>
+                </button>
             <% end %>
             <% if flash[:other_file_data] %>
-                <% other_file_data = flash[:other_file_data] %>
-                <% content_type = flash[:content_type] || "application/octet-stream" %>
-                <% filename = flash[:filename] || "file.dat" %>
-                <%= link_to "#", class: "download-link", data: { data_url: "data:#{content_type};base64,#{other_file_data}", filename: filename } do %>
-                    <button class="download-button">Download as #{filename.split('.').last.upcase} File</button>
-                <% end %>
+                <button>
+                <%= link_to "Download file", downloadfile_path(uuid: flash[:other_file_data], ext: flash[:ext]) %>
+                </button>
             <% end %>
     </div>
 </div>
