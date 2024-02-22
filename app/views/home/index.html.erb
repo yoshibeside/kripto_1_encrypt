@@ -1,7 +1,7 @@
 <% stylesheet_link_tag "home" %>
 
 <h1>Cipher Kriptografi Tugas 1</h1>
-<%= debug session %>
+
 <div class="Container">
   <%= form_with(url: '/process_form', method: 'post', multipart: true) do |form| %>
     <label for="dropdown">Input Type:</label>
@@ -70,7 +70,6 @@
     <div id="hidden-element6" style="display:none;">
         <label for="key">Block Size:</label>
         <%= form.text_field :block_size, placeholder: 'Enter Block Size ex: 3',type: "number", id: "block_size" %>
-        
         <div id="key_grid">
         </div>
     </div>
@@ -86,8 +85,8 @@
 <% if flash[:show_element] %>
 <div class="Container">
         <div class="form-group">
-            <label>Result: </label>
-            <p><%= flash[:result] %></p>
+            <label>Result Base64: </label>
+            <p><%= flash[:result_64] %></p>
             <% if flash[:binary_data] %>
                 <button>
                 <%= link_to "Download binary", downloadbin_path(uuid: flash[:binary_data]) %>
@@ -103,6 +102,15 @@
                 <%= link_to "Download file", downloadfile_path(uuid: flash[:other_file_data], ext: flash[:ext]) %>
                 </button>
             <% end %>
+    </div>
+</div>
+<% end %>
+<br>
+<% if flash[:result] %>
+<div class="Container">
+        <div class="form-group">
+            <label>Result: </label>
+            <p><%= flash[:result] %></p>
     </div>
 </div>
 <% end %>

@@ -21,9 +21,14 @@ var dropdown = document.getElementById('dropdown');
     var hiddenElement6 = document.getElementById('hidden-element6');
 
     const createTable = (size) => {
+        
+    }
+
+    block_size.addEventListener('change', function(e) {
+        var size = parseInt(e.target.value)
         var tableHTML = '<table>';
-        numRows = size
-        numCols = size
+        var numRows = size
+        var numCols = size
         // Loop to generate table rows and cells
         var count = 0
         for (var i = 0; i < numRows; i++) {
@@ -43,16 +48,9 @@ var dropdown = document.getElementById('dropdown');
         while (tableContainer.firstChild) {
             if (tableContainer.firstChild) tableContainer.removeChild(tableContainer.firstChild);
         }
-        
-        console.log("sampai disini?")
+
         // Insert the new table HTML into the container element
         tableContainer.innerHTML = tableHTML;
-    }
-
-    block_size.addEventListener('change', function(e) {
-        console.log("this is suppose to change")
-        createTable(parseInt(e.target.value))
-        console.log("this is suppose to change")
     })
 
 
