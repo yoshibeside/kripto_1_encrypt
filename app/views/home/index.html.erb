@@ -1,6 +1,7 @@
 <% stylesheet_link_tag "home" %>
 
 <h1>Cipher Kriptografi Tugas 1</h1>
+
 <div class="Container">
   <%= form_with(url: '/process_form', method: 'post', multipart: true) do |form| %>
     <label for="dropdown">Input Type:</label>
@@ -9,11 +10,37 @@
     <div id="hidden-element1" style="display: block;">
       <label for="description">Input Text:</label>
       <%= form.text_area :input_text, rows: 4, cols: "50", id: "description" %>
+      <div>
+            <%= form.label :text do %>
+            <%= form.radio_button :file_option, :text, :checked => true%>
+            Text
+            <% end %>
+        </div>
+        
+        <div>
+            <%= form.label :base64 do %>
+            <%= form.radio_button :file_option, :base64 %>
+            Base 64
+            <% end %>
+        </div>
     </div>
 
     <div id="hidden-element2" style="display: none;">
       <label for="file_text">Input File .txt:</label>
       <%= form.file_field :file_text, accept: '.txt' %>
+        <div>
+            <%= form.label :text do %>
+            <%= form.radio_button :file_option, :text, :checked => true %>
+            Text
+            <% end %>
+        </div>
+        
+        <div>
+            <%= form.label :base64 do %>
+            <%= form.radio_button :file_option, :base64 %>
+            Base 64
+            <% end %>
+        </div>
     </div>
 
     <div id="hidden-element3" style="display: none;">
@@ -24,9 +51,28 @@
     <label for="dropdown_cipher">Cipher:</label>
     <%= select_tag :dropdown_cipher, options_for_select([["Vigenere Cipher", "vig_cipher"], ["Auto-Key Vigenere Cipher", "auto_vig_cipher"], ["Extended Vigenere Cipher", "ext_vig_cipher"], ["Playfair Cipher", "playfair_cipher"], ["Affine Cipher", "affine_cipher"], ["Hill Cipher", "hill_cipher"], ["Super Enkripsi", "super_enkripsi"]]), id: "dropdown_cipher" %>
 
-    <div class="form-group">
-      <label for="key">Key:</label>
-      <%= form.text_field :key, placeholder: 'Enter Key', id: "key" %>
+    <div id="hidden-element4" style="display: block;">
+        <div class="form-group">
+        <label for="key">Key:</label>
+        <%= form.text_field :key, placeholder: 'Enter Key', id: "key" %>
+        </div>
+    </div>
+
+    <div id="hidden-element5" style="display: none;">
+        <div class="form-group">
+        <label for="key">m:</label>
+        <%= form.text_field :m, placeholder: 'Enter M Prime Cofactor of 26', id: "m" %>
+        <label for="key">b:</label>
+        <%= form.text_field :b, placeholder: 'Enter How Many Shifts', id: "b" %>
+        </div>
+    </div>
+
+    <div id="hidden-element6" style="display:none;">
+        <label for="key">Block Size:</label>
+        <%= form.text_field :block_size, placeholder: 'Enter Block Size ex: 3',type: "number", id: "block_size" %>
+        
+        <div id="key_grid">
+        </div>
     </div>
 
     <div class="form-group">
@@ -36,27 +82,34 @@
   <% end %>
 </div>
 
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var dropdown = document.getElementById('dropdown');
-    var hiddenElement1 = document.getElementById('hidden-element1');
-    var hiddenElement2 = document.getElementById('hidden-element2');
-    var hiddenElement3 = document.getElementById('hidden-element3');
-    dropdown.addEventListener('change', function() {
-        if (dropdown.value === 'text') {
-            hiddenElement1.style.display = 'block';
-            hiddenElement2.style.display = 'none';
-            hiddenElement3.style.display = 'none';
-        } else if (dropdown.value === 'textfile'){
-            hiddenElement2.style.display = 'block'
-            hiddenElement1.style.display = 'none';
-            hiddenElement3.style.display = 'none';
-        } else {
-            hiddenElement3.style.display = 'block';
-            hiddenElement1.style.display = 'none';
-            hiddenElement2.style.display = 'none';
-        }
-    });
-});
-</script>
+<br>
+<% if flash[:show_element] %>
+<div class="Container">
+        <div class="form-group">
+            <label>Result: </label>
+            <p><%= flash[:result] %></p>
+            <% if flash[:binary_data] %>
+                <% binary_data = flash[:binary_data] %>
+                <% filename = flash[:filename] || "file.bin" %>
+                <%= link_to "#", class: "download-link", data: { data_url: "data:application/octet-stream;base64,#{binary_data}", filename: filename } do %>
+                    <button class="download-button">Download Binary File</button>
+                <% end %>
+            <% end %>
+            <% if flash[:text_data] %>
+                <% text_data = flash[:text_data] %>
+                <% filename = flash[:filename] || "file.txt" %>
+                <%= link_to "#", class: "download-link", data: { data_url: "data:text/plain;charset=utf-8,#{text_data}", filename: filename } do %>
+                    <button class="download-button">Download as Text File</button>
+                <% end %>
+            <% end %>
+            <% if flash[:other_file_data] %>
+                <% other_file_data = flash[:other_file_data] %>
+                <% content_type = flash[:content_type] || "application/octet-stream" %>
+                <% filename = flash[:filename] || "file.dat" %>
+                <%= link_to "#", class: "download-link", data: { data_url: "data:#{content_type};base64,#{other_file_data}", filename: filename } do %>
+                    <button class="download-button">Download as #{filename.split('.').last.upcase} File</button>
+                <% end %>
+            <% end %>
+    </div>
+</div>
+<% end %>
