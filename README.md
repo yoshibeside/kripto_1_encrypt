@@ -1,24 +1,23 @@
-# README
+Nama: Angelica Winasta Sinisuka
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# How To Run
 
-Things you may want to cover:
+This website uses the following framework and environment. Make sure you to have the same or equavalent requirement as follows:
 
-* Ruby version
+- `Rails 7.1.3`
 
-* System dependencies
+- `ruby 3.2.3`
 
-* Configuration
+- `yarn 1.22.19`
 
-* Database creation
+- `node v20.11.1`
 
-* Database initialization
+In order to run, in this directory execute the following commands:
 
-* How to run the test suite
+`bundle`
 
-* Services (job queues, cache servers, search engines, etc.)
+`rails dev:cache`
 
-* Deployment instructions
+`rails s`
 
-* ...
+When the website runs, user should put in valid inputs in order for the software to not crash.
