@@ -61,7 +61,6 @@ module CipherHelper
             c_enkr = (str_char_code + c_key) % 256
             t_enkr += c_enkr.chr
         end
-        Rails.logger.debug "extended vig cipher #{t_enkr}"
         t_enkr
     end
 
@@ -75,7 +74,6 @@ module CipherHelper
             c_dekr = (str_char_code - key_char_code + 256) % 256
             t_dekr += c_dekr.chr
         end
-        Rails.logger.debug "this is extended #{t_dekr}"
         t_dekr
     end
 
@@ -229,7 +227,6 @@ module CipherHelper
 
         cofac_mat = cofactor_matrix (matrix)
         adj_mat = cofac_mat.transpose
-        Rails.logger.debug "adj matrix #{adj_mat} cofac #{cofac_mat}"
 
         matrix_array = adj_mat.to_a
 
@@ -297,46 +294,94 @@ module CipherHelper
         result = letters.to_a.join
         return result
     end
+    
+    def self.order_key(key)
+        sort_char = key.chars.sort_by(&:ord)
+        char_idx = key.chars.each_with_index.map { |char, idx| [char,idx]}
+        sort_idx = sort_char.map do |char|
+            result = nil
+            char_idx.each_with_index do |(key, value), idx|
+                if key == char
+                    result = value
+                    char_idx.delete_at(idx)
+                    break
+                end
+            end
+            result
+        end
+        return sort_idx
+    end
+
+    def self.dec_order(arr_text)
+        asc_pos = arr_text.each_with_index.sort.map(&:last)
+        return asc_pos
+    end
 
     def self.enc_trans_vertical(text, key)
         columns = key.length
         rows = (text.length.to_f / columns).ceil
 
+        grid_area = columns*rows
+        pad_length = grid_area - text.length
+
+        # adding padding
+        text = text.ljust(grid_area, 'X')
+
         # Create the grid and fill it column by column
-        grid = Array.new(columns) { Array.new(rows) }
+        grid = Array.new(rows) { Array.new(columns) }
 
         count = 0
-        (0...rows).each do |n|
-            (0...columns).each do |m|
-            grid[m][n] = text[count]
+        (0...(rows)).each do |n|
+            (0...(columns)).each do |m|
+            grid[n][m] = text[count]
             count += 1
+            end
+        end
+        final_text = ""
+        orders = order_key(key)
+        orders.each do |idx|
+            (0...rows).each do |rows|
+                final_text += grid[rows][idx]
             end
         end
 
         # Read the text out column by column
-        transposed_text = grid.flatten.join
+        final_text += 'X' + pad_length.to_s
     end
 
 
     def self.dec_trans_vertical(ciphertext, key)
-        columns =  key.length
+        # get the last X index
+        last_index = ciphertext.rindex('X')
+        length_pad = ciphertext[(last_index+1)..-1].to_i
+        ciphertext = ciphertext[0..last_index-1]
+        
+        rows =  key.length
         # Calculate rows based on the ciphertext length and column count
-        rows = (ciphertext.length.to_f / columns).ceil
-
+        columns = (ciphertext.length.to_f / rows).ceil
         # Create the grid to hold the columnar data
-        grid = Array.new(columns) { Array.new(rows) }
+        grid = Array.new(rows) { Array.new(columns) }
 
         # Fill the grid column by column
         count = 0
-        (0...columns).each do |n|
-            (0...rows).each do |m|
+        (0...(rows)).each do |n|
+            (0...(columns)).each do |m|
             grid[n][m] = ciphertext[count]
             count += 1
             end
         end
-
         # Read the text out row by row
-        transposed_text = grid.transpose.flatten.join
+        orders = order_key(key)
+        orders = dec_order(orders)
+        final_text = ""
+        (0...columns).each do |col|
+            orders.each do |idx|
+                final_text += grid[idx][col]
+            end
+        end
+
+        final_text = final_text[0...-length_pad]
+        return final_text
     end
 
 end
