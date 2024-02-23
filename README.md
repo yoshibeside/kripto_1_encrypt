@@ -1,8 +1,8 @@
-Nama: Angelica Winasta Sinisuka
+**Extended Cipher and Super Encryption**, could encrypt and decrypt random type of files. Including mp3, mp4, pdf, jpg, png. Make sure it's a valid type of document. Rename the type of file.
 
 # How To Run
 
-This website uses the following framework and environment. Make sure you to have the same or equavalent requirement as follows:
+This website uses the following framework and environment. Make sure you to have the same or equivalent requirement as follows:
 
 - `Rails 7.1.3`
 
